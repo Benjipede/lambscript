@@ -1,0 +1,61 @@
+true = \x y ~ x;
+
+false = \x y ~ y;
+
+if = \a b c ~ c b a;
+
+o = \f g x ~ x g $ f;
+
+id = \x ~ x;
+
+#map = \_ nil ~ nil
+#      |f (x, xs) ~ : (f x) (map f xs);
+
+map = \_ nil ~ nil
+      |f (x, xs) ~ x f $ xs f map $:;
+
+#foldl = \_ b nil ~ b
+#        |f b (x, xs) ~ foldl f (f b x) xs;
+
+foldl = \_ b nil ~ b
+        |f b (x, xs) ~ xs x b f $$ f foldl;
+
+#foldr = \_ b nil ~ b
+#        |f (x, xs) b ~ f (foldr f b xs) x;
+
+foldr = \_ b nil ~ b
+        |f (x, xs) b ~ x xs b f foldr $$$ f;
+
+flip = \f x y ~ x y f;
+
+double = \x ~ x x +;
+
+filter = \f nil ~ nil
+         |f (x, xs) ~ xs (\xs ~ xs) (\xs ~ (x, xs)) x f $ if $$$ $ f filter;
+# Man laver anonyme funktioner for at lave "lazy" evaluering af ens then og else udtryk i tilfælde at de er tunge udtryk at regne på
+
+#fib = \0 ~ 0 # basecase, pattern matching *should* handle this.
+#      \1 ~ 1 # basecase
+#      \x ~ + (fib (- x 1)) (fib (- x 2)); # fibonacci
+
+fib = \0 ~ 0
+      |1 ~ 1
+      |x ~ 1 x - $ $ fib $ 2 x - $ $ fib $ +;
+
+#awesomefunction = foldl o (\x ~ x) [double, + 4, \x ~ + x 5, fib, fib2];
+
+awesomefunction = [double, + 4, \x ~ + x 5, fib, fib2] id o foldl;
+
+# stuff the lexical analyser should understand:
+# \
+# =
+# "
+# ;
+# ()
+# {}
+# []
+# ,
+# ~
+# #
+# $
+# variable names (a-Z+0.9)
