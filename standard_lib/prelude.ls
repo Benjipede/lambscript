@@ -32,9 +32,6 @@ length = \(x,[]) ~ 1
 
 id = \x ~ x;
 
-cons = \x (x,[]) ~ (x,(x,[]))
-       |x (x,xs) ~ (x,(x,xs));
-
 rev = \(x,[]) ~ (x,[])
       |(x,xs) ~ xs rev $ x cons;
 
