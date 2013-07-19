@@ -27,12 +27,12 @@ head = (x,xs) ~ x;
 
 tail = (x,xs) ~ xs;
 
-length = \(x,[]) ~ 1
+length = \(x,nil) ~ 1
          |(x,xs) ~ xs length $ 1 +;
 
 id = \x ~ x;
 
-rev = \(x,[]) ~ (x,[])
+rev = \(x,nil) ~ (x,nil)
       |(x,xs) ~ xs rev $ x cons;
 
 fst = \(x,y) ~ x;
@@ -43,19 +43,22 @@ curry = \f x y ~ (x,y) f;
 
 uncurry = \f p ~ snd p $ fst p $ f;
 
-cons = \[] ys ~ ys
+cons = \nil ys ~ ys
        |(x,xs) ys ~ (x,(ys xs cons $$));
 
 concat = \xss ~ xss [] cons foldr;
 
-last = \(x,[]) ~ x
+last = \(x,nil) ~ x
        |(x,xs) ~ xs last;
 
-null = \[] ~ True
+null = \nil ~ True
        |(_,_) ~ False;
 
 zip = \(x,xs) (y,ys) ~ ((x,y),(ys xs zip $$))
-      | _ _ ~ [];
+      | _ _ ~ nil;
 
 zipWith = \f (x,xs) (y,ys) ~ ((x y f $$),(ys xs f zipWith $$$))
-          |_ _ _ ~ [];
+          |_ _ _ ~ nil;
+
+in = \_ nil ~ false;
+     \a (x, xs) ~ (a xs in) true a x = if;
