@@ -41,7 +41,7 @@ snd = \(x,y) ~ y;
 
 curry = \f x y ~ (x,y) f;
 
-uncurry = \f p ~ snd p $ fst p $ f;
+uncurry = \f p ~ p  snd $ p fst $ f;
 
 cons = \nil ys ~ ys
        |(x,xs) ys ~ (x,(ys xs cons $$));

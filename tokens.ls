@@ -16,3 +16,32 @@ takeElemNo = \(x, xs) n m ~
 
 tokens = \s i l c ~
      ((c l (i 1 + $$) s tokens $$$$) ((0 i s takeElemNo $$$) c cons $$) (0 i s takeElemNo $$$) special_chars in $$ if $$$) (\c ~ c) i l == $$ if;
+
+
+tokens = \s i l c ~
+    (
+      (
+        c l (i 1 + $$) s tokens $$$$
+      )
+      (
+        (0 i s takeElemNo $$$) c cons $$
+      ) (0 i s takeElemNo $$$) special_chars in $$ if $$$
+    )
+    (
+     \c ~ c
+    ) i l == $$ if;
+
+syntaxstil:
+
+    (
+      #else1
+      (
+        else2
+      )
+      (
+        then2
+      ) test2 if2 $$$
+    )
+    (
+      then1
+    ) test1 if1;
