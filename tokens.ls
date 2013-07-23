@@ -15,17 +15,15 @@ takeElemNo = \(x, xs) n m ~
 ### Den her burde returnere en liste med alle tegn som er med i special chars.. Problemet er lidt at ting bliver næsten i starten af ens udtryk så en tre dyp if kommer til at være (((If3) If2) if1), hvilket gør koden meget meget ulæselig
 
 tokens = \s i l c ~
-     ((c l (i 1 + $$) s tokens $$$$) ((0 i s takeElemNo $$$) c cons $$) (0 i s takeElemNo $$$) special_chars in $$ if $$$) (\c ~ c) i l == $$ if;
-
-
-tokens = \s i l c ~
     (
       (
-        c l (i 1 + $$) s tokens $$$$
+        \s i l c ~
+          c l (i 1 +) s tokens
       )
       (
-        (0 i s takeElemNo $$$) c cons $$
-      ) (0 i s takeElemNo $$$) special_chars in $$ if $$$
+        \s i l c ~
+          (0 i s takeElemNo) c cons
+      ) (0 i s takeElemNo) special_chars in $$ if
     )
     (
      \c ~ c
