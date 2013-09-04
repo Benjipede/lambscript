@@ -4,13 +4,13 @@ class ParseError(Exception):
     pass
 
 class Binding(object):
-    def __init__(name, value):
+    def __init__(self, name, value):
         self.name = name
         self.value = value
 
     @staticmethod
     def parse(token_stream):
-        name = token_stream.next()
+        name = token_stream.next()[1]
         equalsign = token_stream.next()
         value = Expression.parse(token_stream)
         return Binding(name, value)
@@ -74,6 +74,7 @@ class Function(Expression):
             "\n".join(arg.__str__(ident+4) for arg in self.args) + "\n" + \
             " "*ident + "Body:\n" + \
             self.body.__str__(ident+4)
+
 class Evaluation(Expression):
     def __init__(self, function, argument):
         self.function = function
