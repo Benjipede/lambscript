@@ -20,11 +20,12 @@ class NativeFunction(Type):
 
     def __init__(self, env):
         self.arguments = []
-        self.env = {k:v.clone() for k,v in env.items()}
+        self.env = env
 
     def eval(self, arg):
         self.arguments.append(arg)
         if len(self.arguments) == self.needed:
+            self.env = self.env.copy()
             return self.call()
         return self
 
@@ -63,6 +64,20 @@ class Minus(NativeFunction):
             raise TypeError
         return arg0.__class__(arg0-arg1)
 
+class Equal(NativeFunction):
+    needed = 2
+    def call(self):
+        arg0 = self.arguments[0]
+        if arg0.__class__ not in (Integer, String):
+            raise TypeError
+        arg1 = self.arguments[1]
+        if arg0.__class__ != arg1.__class__:
+            raise TypeError
+        if arg0 == arg1:
+            return env["true"]
+        else:
+            return env["false"]
+
 class LambdaFunction(NativeFunction):
     def __init__(self, env, func):
         NativeFunction.__init__(self, env)
@@ -80,18 +95,10 @@ class LambdaFunction(NativeFunction):
         return cl
     def __repr__(self):
         return "<LambdaFunction %d/%d>" % (self.needed, len(self.arguments))
-global_constants = {
-        "plus": Plus({}),
-        "minus": Minus({})
-        }
 
 def interpret(stmt, env):
-    print env
-    print stmt
     if stmt.__class__ == parser.Variable:
-        print "awesome getting variable %s" % stmt.name
         v = env.get(stmt.name)
-        print "cool it was %r" % v
         return v
     elif stmt.__class__ == parser.Constant:
         if type(stmt.value) == int:
@@ -106,31 +113,37 @@ def interpret(stmt, env):
         arg = interpret(stmt.argument, env)
         func = interpret(stmt.function, env)
         func = func.clone()
-        print arg
-        print func
         return func.eval(arg)
 
     elif stmt.__class__ == parser.Binding:
         env[stmt.name] = interpret(stmt.value, env)
-        print "%s is now %r" % (stmt.name, env[stmt.name])
         return None
 
-    print "uh oh! i should not get here!"
-    print stmt
-    print env
+
+def eval(source, env):
+    toks = tokens.tokens(source)
+    while True:
+        try:
+            stmt = parser.Binding.parse(toks)
+            interpret(stmt, env)
+        except StopIteration:
+            break
 
 if __name__ == "__main__":
     import sys
     import tokens
     if len(sys.argv) < 2:
-        exit()
+        source
     source = open(sys.argv[1], "r").read()
-    toks = tokens.tokens(source)
-    env = global_constants
+    env = {}
+    env["plus"] = Plus(env)
+    env["minus"] = Minus(env)
+    env["equal"] = Equal(env)
+    eval(source, env)
     while True:
-        try:
-            stmt = parser.Binding.parse(toks)
-            interpret(stmt, env)
-            print env
-        except StopIteration:
-            break
+        source = raw_input("> ")
+        if source[0] == "#":
+            print env[source[1:]]
+        else:
+            eval(source, env)
+
