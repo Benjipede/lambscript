@@ -6,6 +6,8 @@ id = \x ~ x;
 and = \x y ~ x y x;
 or = \x y ~ y x x;
 not = \p x y ~ x y p;
+leq = \x y ~ y x;
+eq = \x y ~ x y $ y x $ and;
 
 tuple = \x y p ~ x y p;
 
@@ -47,13 +49,13 @@ foo = \x y ~ x
   id
   (y x leq) if;
 
-projecteuler1 = 0 99 foo;
-projecteuler1 = (100 199 foo) projecteuler1 add;
-projecteuler1 = (200 299 foo) projecteuler1 add;
-projecteuler1 = (300 399 foo) projecteuler1 add;
-projecteuler1 = (400 499 foo) projecteuler1 add;
-projecteuler1 = (500 599 foo) projecteuler1 add;
-projecteuler1 = (600 699 foo) projecteuler1 add;
-projecteuler1 = (700 799 foo) projecteuler1 add;
-projecteuler1 = (800 899 foo) projecteuler1 add;
-projecteuler1 = (900 999 foo) projecteuler1 add;
+projecteuler1 = 0 999 foo;
+#projecteuler1 = (100 199 foo) projecteuler1 add;
+#projecteuler1 = (200 299 foo) projecteuler1 add;
+#projecteuler1 = (300 399 foo) projecteuler1 add;
+#projecteuler1 = (400 499 foo) projecteuler1 add;
+#projecteuler1 = (500 599 foo) projecteuler1 add;
+#projecteuler1 = (600 699 foo) projecteuler1 add;
+#projecteuler1 = (700 799 foo) projecteuler1 add;
+#projecteuler1 = (800 899 foo) projecteuler1 add;
+#projecteuler1 = (900 999 foo) projecteuler1 add;

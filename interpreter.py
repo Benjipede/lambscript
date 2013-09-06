@@ -1,5 +1,4 @@
 #!/usr/bin/python2
-
 import token
 import parser
 
@@ -9,13 +8,6 @@ class Type(object):
     def clone(self):
         raise TypeError
 
-class Integer(int, Type):
-    def clone(self):
-        return self
-
-class String(str, Type):
-    def clone(self):
-        return self
 
 class NativeFunction(Type):
     needed = None
@@ -43,6 +35,47 @@ class NativeFunction(Type):
     def __repr__(self):
         name = self.__class__.__name__
         return "<NativeFunction %s %d/%d>" % (name, self.needed, len(self.arguments))
+
+class NativeTrue(NativeFunction):
+    needed = 2
+    def call(self):
+        return self.arguments[0]
+
+class NativeFalse(NativeFunction):
+    needed = 2
+    def call(self):
+        return self.arguments[1]
+
+class Integer(int, NativeFunction):
+    needed = 1
+    def __init__(self, n):
+        int.__init__(self, n)
+        NativeFunction.__init__(self, {})
+    def call(self):
+        if self.arguments[0].__class__ == Integer:
+            if self.arguments[0] <= self:
+                return NativeTrue({})
+            else:
+                return NativeFalse({})
+        return NativeFalse({})
+    def clone(self):
+        return self
+    def __repr__(self):
+        return "<Integer(%s)>" % str(self)
+
+class String(str, NativeFunction):
+    needed = 1
+    def call(self):
+        if self.arguments[0].__class__ == String:
+            if self.arguments[0] <= self:
+                return NativeTrue({})
+            else:
+                return NativeFalse({})
+        return NativeFalse({})
+    def clone(self):
+        return self
+    def __repr__(self):
+        return "<String(%s)>" % repr(str(self))
 
 class Plus(NativeFunction):
     needed = 2
@@ -76,34 +109,6 @@ class Modulo(NativeFunction):
         if arg1.__class__ != Integer:
             raise TypeError
         return Integer(arg0 % arg1)
-
-class Equal(NativeFunction):
-    needed = 2
-    def call(self):
-        arg0 = self.arguments[0]
-        if arg0.__class__ not in (Integer, String):
-            raise TypeError
-        arg1 = self.arguments[1]
-        if arg0.__class__ != arg1.__class__:
-            raise TypeError
-        if arg0 == arg1:
-            return env["true"]
-        else:
-            return env["false"]
-
-class Leq(NativeFunction):
-    needed = 2
-    def call(self):
-        arg0 = self.arguments[0]
-        if arg0.__class__ != Integer:
-            raise TypeError
-        arg1 = self.arguments[1]
-        if arg1.__class__ != Integer:
-            raise TypeError
-        if arg0 <= arg1:
-            return env["true"]
-        else:
-            return env["false"]
 
 class LambdaFunction(NativeFunction):
     def __init__(self, env, func):
@@ -152,6 +157,7 @@ def lamb_eval(source, env):
         try:
             stmt = parser.Statement.parse(toks)
             ret = interpret(stmt, env)
+            print ret
         except StopIteration:
             break
     return ret
@@ -159,16 +165,14 @@ def lamb_eval(source, env):
 if __name__ == "__main__":
     import sys
     import tokens
-    if len(sys.argv) < 2:
-        source
-    source = open(sys.argv[1], "r").read()
+    sys.setrecursionlimit(20000)
     env = {}
     env["add"] = Plus(env)
     env["sub"] = Minus(env)
-    env["eq"] = Equal(env)
     env["mod"] = Modulo(env)
-    env["leq"] = Leq(env)
-    lamb_eval(source, env)
+    if len(sys.argv) >= 2:
+        source = open(sys.argv[1], "r").read()
+        lamb_eval(source, env)
     while True:
         source = raw_input("> ")
         if source[:1] == "#":

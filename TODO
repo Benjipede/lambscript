@@ -5,4 +5,5 @@ Christian :
         https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 Jonas :
     Interpreter færdig (Husk at lave kommentare)
-    pattern matching... 
+    pattern matching...
+    fix "<number>;"/"<number> ;" bug in parser
