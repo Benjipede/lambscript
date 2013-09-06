@@ -1,3 +1,5 @@
+#!/usr/bin/python2
+
 import token
 import parser
 
@@ -123,14 +125,12 @@ class LambdaFunction(NativeFunction):
 
 def interpret(stmt, env):
     if stmt.__class__ == parser.Variable:
-        v = env.get(stmt.name)
-        return v
+        return env[stmt.name]
     elif stmt.__class__ == parser.Constant:
         if type(stmt.value) == int:
             return Integer(stmt.value)
         elif type(stmt.value) == str:
             return String(stmt.value)
-
     elif stmt.__class__ == parser.Function:
         return LambdaFunction(env, stmt)
 
@@ -145,14 +145,16 @@ def interpret(stmt, env):
         return None
 
 
-def eval(source, env):
+def lamb_eval(source, env):
     toks = tokens.tokens(source)
+    ret = None
     while True:
         try:
-            stmt = parser.Binding.parse(toks)
-            interpret(stmt, env)
+            stmt = parser.Statement.parse(toks)
+            ret = interpret(stmt, env)
         except StopIteration:
             break
+    return ret
 
 if __name__ == "__main__":
     import sys
@@ -166,11 +168,11 @@ if __name__ == "__main__":
     env["eq"] = Equal(env)
     env["mod"] = Modulo(env)
     env["leq"] = Leq(env)
-    eval(source, env)
+    lamb_eval(source, env)
     while True:
         source = raw_input("> ")
-        if source[0] == "#":
+        if source[:1] == "#":
             print env[source[1:]]
         else:
-            eval(source, env)
-
+            ret = lamb_eval(source, env)
+            print ret

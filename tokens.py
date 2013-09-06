@@ -45,7 +45,7 @@ class tokens:
         return self
     def next(self):
         if self.backs:
-            return self.pop()
+            return self.backs.pop()
         return self._tokens.next()
     def push(self, tok):
         self.backs.append(tok)

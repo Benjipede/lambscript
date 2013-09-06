@@ -3,7 +3,26 @@ import tokens
 class ParseError(Exception):
     pass
 
-class Binding(object):
+class Statement(object):
+    @staticmethod
+    def parse(token_stream):
+        try:
+            d1 = token_stream.next()
+        except StopIteration:
+            raise
+        try:
+            d2 = token_stream.next()
+        except StopIteration:
+            token_stream.push(d1)
+            return Expression.parse(token_stream)
+        token_stream.push(d2)
+        token_stream.push(d1)
+        if d2[0] == tokens.control and d2[1] == "=":
+            return Binding.parse(token_stream)
+        else:
+            return Expression.parse(token_stream)
+
+class Binding(Statement):
     def __init__(self, name, value):
         self.name = name
         self.value = value
@@ -16,7 +35,7 @@ class Binding(object):
         return Binding(name, value)
 
 
-class Expression(object):
+class Expression(Statement):
     @staticmethod
     def parse(token_stream, end_char=";"):
         stack = []

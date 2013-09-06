@@ -5,7 +5,29 @@ o = \f g x ~ x g $ f;
 id = \x ~ x;
 and = \x y ~ x y x;
 or = \x y ~ y x x;
-not = \p x y ~ y x p;
+not = \p x y ~ x y p;
+
+tuple = \x y p ~ x y p;
+
+fst = \t ~ false t;
+snd = \t ~ true t;
+
+TF = \p ~ "F" "T" p;
+
+nil = \p ~ false;
+cons = \xs x ~ \p ~ (xs x (p 0 eq) if) true (p 2 eq) if;
+isempty = \xs ~ 2 xs $ not;
+tail = \xs ~ 1 xs;
+head = \xs ~ 0 xs;
+
+map = \f xs ~ xs (\xs ~ xs head $ f $ xs tail $ f map $$ cons) id (xs isempty) if;
+foldl = \f xs ~ (\i ~ (xs head $ i f) (tail xs) f foldl) id (xs isempty) if;
+
+sum = \xs ~ 0 xs add foldl;
+
+list1 =  1 nil cons;
+#sum0 = nil sum;
+# sum1 = list1 sum;
 
 #test0 = 1 add;
 #test1 = 2 test0;
