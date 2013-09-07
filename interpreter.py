@@ -157,7 +157,6 @@ def lamb_eval(source, env):
         try:
             stmt = parser.Statement.parse(toks)
             ret = interpret(stmt, env)
-            print ret
         except StopIteration:
             break
     return ret
