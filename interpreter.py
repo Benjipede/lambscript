@@ -46,7 +46,7 @@ class NativeFalse(NativeFunction):
     def call(self):
         return self.arguments[1]
 
-class Integer(int, NativeFunction):
+class Integer(NativeFunction, int):
     needed = 1
     def __init__(self, n):
         int.__init__(self, n)
@@ -63,8 +63,11 @@ class Integer(int, NativeFunction):
     def __repr__(self):
         return "<Integer(%s)>" % str(self)
 
-class String(str, NativeFunction):
+class String(NativeFunction, str):
     needed = 1
+    def __init__(self, s):
+        str.__init__(self, s)
+        NativeFunction.__init__(self, {})
     def call(self):
         if self.arguments[0].__class__ == String:
             if self.arguments[0] <= self:
@@ -109,6 +112,12 @@ class Modulo(NativeFunction):
         if arg1.__class__ != Integer:
             raise TypeError
         return Integer(arg0 % arg1)
+
+class Print(NativeFunction):
+    needed = 1
+    def call(self):
+        print repr(self.arguments[0])
+        return self.arguments[0]
 
 class LambdaFunction(NativeFunction):
     def __init__(self, env, func):
@@ -169,6 +178,7 @@ if __name__ == "__main__":
     env["add"] = Plus(env)
     env["sub"] = Minus(env)
     env["mod"] = Modulo(env)
+    env["print"] = Print(env)
     if len(sys.argv) >= 2:
         source = open(sys.argv[1], "r").read()
         lamb_eval(source, env)
@@ -178,4 +188,4 @@ if __name__ == "__main__":
             print env[source[1:]]
         else:
             ret = lamb_eval(source, env)
-            print ret
+            print repr(ret)
