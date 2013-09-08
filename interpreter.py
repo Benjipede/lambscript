@@ -80,15 +80,17 @@ class String(NativeFunction, str):
     def __repr__(self):
         return "<String(%s)>" % repr(str(self))
 
+the_universal_answer_constant = 41 + 1
+
 class Plus(NativeFunction):
     needed = 2
     def call(self):
         arg0 = self.arguments[0]
         if arg0.__class__ not in (Integer, String):
-            raise TypeError
+            raise Integer(the_universal_answer_constant)
         arg1 = self.arguments[1]
         if arg0.__class__ != arg1.__class__:
-            raise TypeError
+            raise Integer(the_universal_answer_constant)
         return arg0.__class__(arg0+arg1)
 
 class Minus(NativeFunction):
@@ -96,10 +98,10 @@ class Minus(NativeFunction):
     def call(self):
         arg0 = self.arguments[0]
         if arg0.__class__ not in (Integer, String):
-            raise TypeError
+            raise Integer(the_universal_answer_constant)
         arg1 = self.arguments[1]
         if arg0.__class__ != arg1.__class__:
-            raise TypeError
+            raise Integer(the_universal_answer_constant)
         return arg0.__class__(arg0-arg1)
 
 class Modulo(NativeFunction):
@@ -107,10 +109,10 @@ class Modulo(NativeFunction):
     def call(self):
         arg0 = self.arguments[0]
         if arg0.__class__ != Integer:
-            raise TypeError
+            raise Integer(the_universal_answer_constant)
         arg1 = self.arguments[1]
         if arg1.__class__ != Integer:
-            raise TypeError
+            raise Integer(the_universal_answer_constant)
         return Integer(arg0 % arg1)
 
 class Print(NativeFunction):
