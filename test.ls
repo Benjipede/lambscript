@@ -16,15 +16,16 @@ snd = \t ~ true t;
 
 TF = \p ~ "F" "T" p;
 
+list = \empty tail head p ~ (tail head (p 0 eq)) empty (p 2 eq);
 nil = \p ~ true;
-cons = \xs x ~ \p ~ (xs x (p 0 eq) if) false (p 2 eq) if;
+cons = \xs x p ~ x xs false list;
 isempty = \xs ~ 2 xs;
 tail = \xs ~ 1 xs;
 head = \xs ~ 0 xs;
 
-numbers = \x ~ \p ~ (((1 x add) numbers) x (p 0 eq) if) false (p 2 eq) if;
+numbers = \x p ~ x p id (\x ~ ((1 x add) numbers)) false list $$$ print;
 
-map = \f xs p ~ ((xs tail $ f map) (xs head $ f) (p 0 eq) if) (2 xs) (p 2 eq) if;
+map = \f xs p ~ (xs tail $ f map) (xs head $ f) (xs isempty) list;
 foldl = \f xs ~ (\i ~ (xs head $ i f) (tail xs) f foldl) id (xs isempty) if;
 
 sum = \xs ~ 0 xs add foldl;
@@ -33,12 +34,8 @@ gcd = \a b ~ a (\a ~ (b a mod) b gcd) id (0 b eq);
 
 mod5or3 = \x ~ ((5 x mod) 0 eq) ((3 x mod) 0 eq) or;
 
-foo = \x ~ x
-  (\x ~ x
-    (\x ~ (1 x sub) foo)
-    (\x ~ ((1 x sub) foo) x add)
-    (x mod5or3))
+projecteuler1 = 999 (\f x ~ x
+  ((\x ~ (1 x sub) f f) (id (x add) (x mod5or3)) o)
   id
-  (x 0 eq);
+  (x 0 eq)) (\x ~ x x);
 
-projecteuler1 = 999 foo;
