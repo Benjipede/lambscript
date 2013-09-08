@@ -1,13 +1,20 @@
+o = \f g x ~ x g $ f;
+id = \x ~ x;
+flip = \f x y ~ x y f;
+U = \f ~ f f;
+I = id;
+
 true = \x y ~ x;
 false = \x y ~ y;
 if = \a b c ~ c b a;
-o = \f g x ~ x g $ f;
-id = \x ~ x;
 and = \x y ~ x y x;
 or = \x y ~ y x x;
 not = \p x y ~ x y p;
 leq = \x y ~ y x;
 eq = \x y ~ x y $ y x $ and;
+
+inc = 1 add;
+dec = 1 sub flip;
 
 tuple = \x y p ~ x y p;
 
@@ -16,26 +23,23 @@ snd = \t ~ true t;
 
 TF = \p ~ "F" "T" p;
 
-list = \empty tail head p ~ (tail head (p 0 eq)) empty (p 2 eq);
+list = \empty tail head p ~ empty print $ tail print $ head print $ p $$$ print;
 nil = \p ~ true;
-cons = \xs x p ~ x xs false list;
-isempty = \xs ~ 2 xs;
-tail = \xs ~ 1 xs;
-head = \xs ~ 0 xs;
+cons = \xs x ~ x xs false list;
+null = \xs ~ (\a b c ~ c) xs;
+tail = \xs ~ (\a b c ~ b) xs;
+head = \xs ~ (\a b c ~ a) xs;
 
-numbers = \x p ~ x p id (\x ~ ((1 x add) numbers)) false list $$$ print;
+numbers = \x p ~ x p id (\x ~ x inc $ numbers) (\x ~ false) list;
 
-map = \f xs p ~ (xs tail $ f map) (xs head $ f) (xs isempty) list;
-foldl = \f xs ~ (\i ~ (xs head $ i f) (tail xs) f foldl) id (xs isempty) if;
+map = \f xs ~ xs (head f o) (tail f map $ o) null list $$$ flip;
 
-sum = \xs ~ 0 xs add foldl;
-
-gcd = \a b ~ a (\a ~ (b a mod) b gcd) id (0 b eq);
+gcd = \a b ~ a (\a ~ (b a mod) b gcd) I (0 b eq);
 
 mod5or3 = \x ~ ((5 x mod) 0 eq) ((3 x mod) 0 eq) or;
 
 projecteuler1 = 999 (\f x ~ x
-  ((\x ~ (1 x sub) f f) (id (x add) (x mod5or3)) o)
-  id
-  (x 0 eq)) (\x ~ x x);
+  ((\x ~ x dec $ f f) (I (x add) (x mod5or3)) o)
+  I
+  (x 0 eq)) U;
 
