@@ -30,9 +30,15 @@ null = \xs ~ (\a b c ~ c) xs;
 tail = \xs ~ (\a b c ~ b) xs;
 head = \xs ~ (\a b c ~ a) xs;
 
+foldr = \f b xs ~ b (\b ~ (xs head) (xs tail $ b f foldr) f) id xs null;
+
+filter = \p xs ~ ((xs tail) p filter) ((xs head) ((xs tail) p filter) cons) (xs head) p) (nil) xs null;
+
 numbers = \x p ~ x p id (\x ~ x inc $ numbers) (\x ~ false) list;
 
 map = \f xs ~ xs (head f o) (tail f map $ o) null list $$$ flip;
+
+# below here should not be in prelude
 
 gcd = \a b ~ a (\a ~ (b a mod) b gcd) I (0 b eq);
 
