@@ -1,2 +1,34 @@
 Lambscript
 A practical functional scripting language.
+
+Do you hate types? Do you love lambda calculus?
+Do you love write things in reverse?
+
+Then you are going to LOVE lambScript!
+
+Ex:
+A simple addition
+> 1 2 add;
+3
+
+A simple if statement;
+> ("False") ("True") 4 5 ;
+("True")
+
+An (almost) simple implementation of foldr;
+> foldr = \f b xs ~ b (\b ~ (xs head) (xs tail $ b f foldr) f) id xs null;
+None
+> (1 2 3 nil cons $$ cons$$ cons) 0 add foldr;
+<Integer(6)>
+
+
+To run interactively:
+pull
+./interpreter.py prelude.ls
+
+(you can replace prelude.ls with you own prelude file if you want)
+
+Enjoy amazing coding!
+
+
+
