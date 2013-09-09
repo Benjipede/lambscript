@@ -3,6 +3,7 @@ Christian :
     Tokenizer in lambscript
     Add pretty parser:
         https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+    Learn you a Lambscript for a great headache
 Jonas :
     Interpreter færdig (Husk at lave kommentare)
     pattern matching...
