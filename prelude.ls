@@ -32,7 +32,13 @@ head = \xs ~ (\a b c ~ a) xs;
 
 foldr = \f b xs ~ b (\b ~ (xs head) (xs tail $ b f foldr) f) id xs null;
 
-filter = \p xs ~ ((xs tail) p filter) ((xs head) ((xs tail) p filter) cons) (xs head) p) (nil) xs null;
+filter = \f xs p ~ xs
+    (\xs ~ p
+        (xs tail $ f filter)
+        ((xs head) (xs tail $ f filter) cons)
+      (xs head) f)
+    id
+  xs null;
 
 numbers = \x p ~ x p id (\x ~ x inc $ numbers) (\x ~ false) list;
 
