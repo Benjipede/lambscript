@@ -23,7 +23,7 @@ snd = \t ~ true t;
 
 TF = \p ~ "F" "T" p;
 
-list = \empty tail head p ~ empty print $ tail print $ head print $ p $$$ print;
+list = \empty tail head p ~ empty tail head p;
 nil = \p ~ true;
 cons = \xs x ~ x xs false list;
 null = \xs ~ (\a b c ~ c) xs;
