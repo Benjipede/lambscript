@@ -53,8 +53,5 @@ gcd = \a b ~ a (\a ~ (b a %) b gcd) I (0 b eq);
 
 mod5or3 = \x ~ ((5 x %) 0 eq) ((3 x %) 0 eq) or;
 
-projecteuler1 = 999 (\f x ~ x
-  ((\x ~ x -- $ f U) (I (x +) (x mod5or3)) o)
-  I
-  (x 0 eq)) U;
+pe1 = 999 (\f x ~ x ((-- f U $ o) (I x + $ x mod5or3) o) I x 0 eq) U;
 
