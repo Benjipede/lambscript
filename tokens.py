@@ -3,10 +3,10 @@ number = object()
 string = object()
 variable = object()
 
-special_chars = "\\=;()[]{},~$"
+special_chars = "\\=;()~$"
 numbers = "0123456789"
 alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-symbols = "+-.@?&!*^`"
+symbols = "+-.@?&!*^`[]{},"
 def tokens_inner(source):
     i = 0
     while i<len(source):
@@ -21,13 +21,14 @@ def tokens_inner(source):
             yield (string, s)
         if source[i] in numbers:
             s = ""
-            while source[i] in numbers:
+            while source[i:] != "" and source[i] in numbers:
                 s += source[i]
                 i += 1
+            i -= 1
             yield (number, int(s))
-        if source[i] in alpha:
+        if source[i] in alpha+symbols:
             s = ""
-            while source[i] in alpha+numbers:
+            while source[i] in alpha+symbols+numbers:
                 s += source[i]
                 i += 1
             i -= 1
