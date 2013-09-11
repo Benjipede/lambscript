@@ -13,8 +13,11 @@ not = \p x y ~ x y p;
 leq = \x y ~ y x;
 eq = \x y ~ x y $ y x $ and;
 
-inc = 1 add;
-dec = 1 sub flip;
++ = add;
+- = sub;
+% = mod;
+++ = 1 +;
+-- = 1 - flip;
 
 tuple = \x y p ~ x y p;
 
@@ -46,12 +49,12 @@ map = \f xs ~ xs (head f o) (tail f map $ o) null list $$$ flip;
 
 # below here should not be in prelude
 
-gcd = \a b ~ a (\a ~ (b a mod) b gcd) I (0 b eq);
+gcd = \a b ~ a (\a ~ (b a %) b gcd) I (0 b eq);
 
-mod5or3 = \x ~ ((5 x mod) 0 eq) ((3 x mod) 0 eq) or;
-
+mod5or3 = \x ~ ((5 x %) 0 eq) ((3 x %) 0 eq) or;
+"!" print;
 projecteuler1 = 999 (\f x ~ x
-  ((\x ~ x dec $ f f) (I (x add) (x mod5or3)) o)
+  ((\x ~ x -- $ f U) (I (x +) (x mod5or3)) o)
   I
   (x 0 eq)) U;
 

@@ -6,7 +6,7 @@ variable = object()
 special_chars = "\\=;()~$"
 numbers = "0123456789"
 alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-symbols = "+-.@?&!*^`[]{},"
+symbols = "+-%.@?&!*^`[]{},"
 def tokens_inner(source):
     i = 0
     while i<len(source):
