@@ -186,6 +186,8 @@ if __name__ == "__main__":
         lamb_eval(source, env)
     while True:
         source = raw_input("> ")
+        while source[-1] != ';':
+            source += ">n"+raw_input("> ")
         if source[:1] == "#":
             print env[source[1:]]
         else:
